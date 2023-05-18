@@ -1,0 +1,26 @@
+{
+    "type": "senors|error",
+    "data": "T<jsonObject>|string"
+}
+
+{
+    "cpu": {
+        "name": "Intel i7 13700k",
+        "temperature": {
+            "value": 63,
+            "unit": "degrees"
+        },
+        "load": {
+            "value": 70,
+            "unit": "percent"
+        },
+        "power": {
+            "value": 108,
+            "unit": "watt"
+        }
+    },
+    "gpu": {
+
+    }
+}
+

@@ -1,24 +1,45 @@
 # sensor-app-ui
 
-## Project setup
-```
-npm install
-```
+## 
+```json
+{
+    "type": "sensors",
+    "data": {
+        "cpu": {
+            "name": "i7 13700k",
+            "temperature": {
+                "value": 63,
+                "unit": "degrees"
+            },
+            "load": {
+                "value": 70,
+                "unit": "percent"
+            },
+            "power": {
+                "value": 108,
+                "unit": "watt"
+            }
+        },
+        "gpu": {
+            "name": "RTX 2070 Super",
+            "temperature": {
+                "value": 63,
+                "unit": "degrees"
+            },
+            "load": {
+                "value": 70,
+                "unit": "percent"
+            },
+            "power": {
+                "value": 108,
+                "unit": "watt"
+            }
+        } 
+    }
+}
 
-### Compiles and hot-reloads for development
+{
+    "type": "error",
+    "msg": "<error-message>"
+}
 ```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
