@@ -1,6 +1,8 @@
 <template>
     <div class="dashboard">
         <div class="header">
+            <button @click="closeWs">close ws</button>
+            <button @click="connect">connect ws</button>
         </div>
 
         <div class="content">
@@ -76,6 +78,35 @@ export default {
     },
     unmounted() {
         // this.ws.close()
+    },
+    methods: {
+        connect: function() {
+            console.log("connecting");
+            this.ws = new WebSocket("ws://localhost:8000")
+
+            this.ws.addEventListener("open", () => {
+                console.log("ws: connected");
+            });
+            this.ws.addEventListener("close", () => {
+                console.log("ws: closed")
+            })
+            this.ws.addEventListener("message", (msg) => {
+                const obj = JSON.parse(msg.data);
+                this.store.set(obj);
+
+                if (this.loading) {
+                    this.loading = false;
+                }
+            });
+            this.ws.addEventListener("error", (err) => {
+                console.log("ws err:", err);
+            })
+
+        },
+        closeWs: function() {
+            console.log("closing ws");
+            this.ws.close()
+        }
     }
     
 }

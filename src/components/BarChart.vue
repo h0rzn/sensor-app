@@ -1,45 +1,33 @@
 <template>
-    <!-- <Line
+    <Line
       id="chart"
       ref="chartRef"
       :options="options"
       :data="chartData"
-    /> -->
-    <canvas ref="chartRef" width="500" height="300"></canvas>
+    />
 </template>
   
 <script>
 import { useSensorsStore } from '../store/Sensors.js';
+import { toRaw } from 'vue';
 import { Chart, registerables } from 'chart.js';
+import { Line } from 'vue-chartjs'
 
 Chart.register(...registerables);
 
-// const maxValues = 3;
+// const maxValues = 5;
+const updateInterval = 1000;
 
 export default {
     name: 'SensorChart',
+    components: { Line },
     data() {
         return {
-            updateSetTimer: undefined
-        }
-    },
-    setup() {
-        const store = useSensorsStore();
-        return { store };
-    },
-    created() {
-        this.updateSetTimer = setInterval(this.updateDataSet, 1000);
-        console.log("created timer h");
-    },
-    mounted() {
-        console.log("mounted")
-
-        new Chart(this.$refs.chartRef, {
-            type: "line",
-            data: {
+            updateSetTimer: undefined,
+            chartData: {
                 labels: [ 'A', 'B', 'C' ],
                 datasets: [ { 
-                    data: [0, 0, 0] 
+                    data: [] 
                 }]
             },
             options: {
@@ -80,21 +68,90 @@ export default {
                     }
                 }
             }
-        })
+        }
+    },
+    setup() {
+        const store = useSensorsStore();
+        return { store };
+    },
+    created() {
+        this.updateSetTimer = setInterval(this.updateSet, updateInterval);
+        console.log("created timer h");
+    },
+    mounted() {
+        console.log("mounted")
+
+        // new Chart(this.$refs.chartRef, {
+        //     type: "line",
+        //     data: {
+        //         labels: [ 'A', 'B', 'C' ],
+        //         datasets: [ { 
+        //             data: [10, 20, 30] 
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         elements: {
+        //             point: {
+        //                 pointStyle: false,
+        //             },
+        //         },
+        //         scales: {
+        //             y: {
+        //                 ticks: {
+        //                     display: false,
+        //                 },
+        //                 grid: {
+        //                     display: false,
+        //                 },
+        //                 border: {
+        //                     display: false,
+        //                 }
+        //             },
+        //             x: {
+        //                 ticks: {
+        //                     display: false,
+        //                 },
+        //                 grid: {
+        //                     display: false,
+        //                 },
+        //                 border: {
+        //                     display: false,
+        //                 }
+        //             }
+        //         },
+        //         plugins: {
+        //             legend: {
+        //                 display: false,
+                        
+        //             }
+        //         }
+        //     }
+        // })
+    },
+    computed: {
+        // history() {
+
+        // }
     },
     methods: {
-        updateDataSet() {
+        updateSet() {
             console.log("updating dataset");
-            let cpuLoadHistory = this.store.getCpuLoadHistory();
-            console.log(cpuLoadHistory);
+            let chart = toRaw(this.$refs.chartRef.chart);
+            let data = chart.data.datasets[0].data;
 
-            // this.$refs.chartRef._chart
-            // this.$refs.chartRef._chart.update();
+            let loadHistory = toRaw(this.store.getCpuLoadHistory);
+            this.chartData.datasets[0].data = loadHistory;
+            
+            console.log(loadHistory, this.chartData.datasets[0].data, data);
+            
+            chart.update();
         },
         cancelUpdateSetTimer () {
             clearInterval(this.updateSetTimer);
         }
     },
+    
 }
 </script>
 
