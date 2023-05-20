@@ -16,7 +16,7 @@ import { Line } from 'vue-chartjs'
 Chart.register(...registerables);
 
 // const maxValues = 5;
-const updateInterval = 1000;
+const updateInterval = 2000;
 
 export default {
     name: 'SensorChart',
@@ -25,7 +25,7 @@ export default {
         return {
             updateSetTimer: undefined,
             chartData: {
-                labels: [ 'A', 'B', 'C' ],
+                labels: [ 0, 1, 2, 3, 4, 5, 7, 8, 9 ],
                 datasets: [ { 
                     data: [] 
                 }]
@@ -76,75 +76,23 @@ export default {
     },
     created() {
         this.updateSetTimer = setInterval(this.updateSet, updateInterval);
-        console.log("created timer h");
     },
-    mounted() {
-        console.log("mounted")
-
-        // new Chart(this.$refs.chartRef, {
-        //     type: "line",
-        //     data: {
-        //         labels: [ 'A', 'B', 'C' ],
-        //         datasets: [ { 
-        //             data: [10, 20, 30] 
-        //         }]
-        //     },
-        //     options: {
-        //         responsive: true,
-        //         elements: {
-        //             point: {
-        //                 pointStyle: false,
-        //             },
-        //         },
-        //         scales: {
-        //             y: {
-        //                 ticks: {
-        //                     display: false,
-        //                 },
-        //                 grid: {
-        //                     display: false,
-        //                 },
-        //                 border: {
-        //                     display: false,
-        //                 }
-        //             },
-        //             x: {
-        //                 ticks: {
-        //                     display: false,
-        //                 },
-        //                 grid: {
-        //                     display: false,
-        //                 },
-        //                 border: {
-        //                     display: false,
-        //                 }
-        //             }
-        //         },
-        //         plugins: {
-        //             legend: {
-        //                 display: false,
-                        
-        //             }
-        //         }
-        //     }
-        // })
-    },
-    computed: {
-        // history() {
-
-        // }
+    watch: {
+        chartData: {
+            handler() {
+                let chart = this.$refs.chartRef.chart;
+                chart.update();
+            },
+            deep: true
+        }
     },
     methods: {
         updateSet() {
             console.log("updating dataset");
-            let chart = toRaw(this.$refs.chartRef.chart);
-            let data = chart.data.datasets[0].data;
+            let chart = this.$refs.chartRef.chart;
 
             let loadHistory = toRaw(this.store.getCpuLoadHistory);
-            this.chartData.datasets[0].data = loadHistory;
-            
-            console.log(loadHistory, this.chartData.datasets[0].data, data);
-            
+            chart.data.datasets[0].data = loadHistory;
             chart.update();
         },
         cancelUpdateSetTimer () {

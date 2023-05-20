@@ -59,7 +59,7 @@ export const useSensorsStore = defineStore("sensors", {
             this.latest = set;
             let loadHistory = this.history.cpu.load;
             let cpuLoad = set.data.cpu.load.value;
-            if (loadHistory.length == 3) {
+            if (loadHistory.length == 10) {
                 loadHistory.shift();
                 loadHistory.push(cpuLoad);
             } else {
