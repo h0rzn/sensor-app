@@ -1,13 +1,12 @@
 <template>
     <div class="dashboard">
         <div class="header">
-            <button @click="closeWs">close ws</button>
-            <button @click="connect">connect ws</button>
         </div>
 
         <div class="content">
             <div v-if="loading" class="content-centered">
-                <LoadingSpinner/>
+                <ErrorScreen v-if="conFailure"/>
+                <LoadingSpinner v-else/>
             </div>
 
             <div v-else class="content-sensors">
@@ -15,10 +14,7 @@
                 <HardwareItem typ="GPU" name="2070 super"/>
             </div>
 
-
         </div>
-
-        
         
 
     </div>
@@ -28,85 +24,65 @@
 import HardwareItem from './HardwareItem.vue';
 import { useSensorsStore } from '../store/Sensors.js';
 import LoadingSpinner from './LoadingSpinner.vue';
+import ErrorScreen from './ErrorScreen.vue';
 
 export default {
     components: {
         HardwareItem,
-        LoadingSpinner
+        LoadingSpinner,
+        ErrorScreen
     },
     data() {
         return {
             ws: undefined,
             loading: true,
+            conFailure: false,
         }
     },
     setup() {
         const store = useSensorsStore();
         return { store };
     },
-    mounted() {
+    async mounted() {
         console.log("created, ws")
-        
-        // testing
-        // this.loading = false;
 
-        // window.addEventListener("beforeunload", () => {
-        //     console.log("hallo");
-        //     this.ws.close();
-        // })
-
-
-        this.ws = new WebSocket("ws://localhost:8000")
-
-        this.ws.addEventListener("open", () => {
-            console.log("ws: connected");
-        });
-        this.ws.addEventListener("close", () => {
-            console.log("ws: closed")
-        })
-        this.ws.addEventListener("message", (msg) => {
-            const obj = JSON.parse(msg.data);
-            this.store.set(obj);
-
-            if (this.loading) {
-                this.loading = false;
-            }
-        });
-        this.ws.addEventListener("error", (err) => {
-            console.log("ws err:", err);
+        await this.connect().then(() => {}).catch((err) => {
+            this.conFailure = true;
+            console.log("async connect: ERROR", err);
         })
     },
     unmounted() {
         // this.ws.close()
     },
     methods: {
-        connect: function() {
-            console.log("connecting");
-            this.ws = new WebSocket("ws://localhost:8000")
+        connect() {
+            return new Promise((resolve, reject) => {
+                console.log("attempt connect")
+                var con = new WebSocket("ws://localhost:8000");
 
-            this.ws.addEventListener("open", () => {
-                console.log("ws: connected");
+                con.addEventListener("open", () => {
+                    console.log("open event");
+                    // clearTimeout(conTimeout);
+                    resolve();
+                });
+                con.addEventListener("close", () => {
+                    console.log("ws: closed")
+                })
+                con.addEventListener("message", (msg) => {
+                    const obj = JSON.parse(msg.data);
+                    this.store.set(obj);
+
+                    if (this.loading) {
+                        this.loading = false;
+                    }
+                });
+                con.addEventListener("error", (err) => {
+                    reject(err);
+                })
+
+                this.ws = con;
             });
-            this.ws.addEventListener("close", () => {
-                console.log("ws: closed")
-            })
-            this.ws.addEventListener("message", (msg) => {
-                const obj = JSON.parse(msg.data);
-                this.store.set(obj);
-
-                if (this.loading) {
-                    this.loading = false;
-                }
-            });
-            this.ws.addEventListener("error", (err) => {
-                console.log("ws err:", err);
-            })
-
         },
-        closeWs: function() {
-            console.log("closing ws");
-            this.ws.close()
-        }
     }
     
 }
