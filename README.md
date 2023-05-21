@@ -4,7 +4,8 @@ This repository contains the frontend project and is written in Vue.
 
 The UI is designed for a 5'' display (480x320). Responsive design is planned.
 
-Repository for the Windows-Deamon can be found <here>. 
+The Windows-Deamon is currently in a rather early state but the source code will
+be uploaded soon. 
 
 ## 
 ```json
