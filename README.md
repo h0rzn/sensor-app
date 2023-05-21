@@ -7,6 +7,8 @@ The UI is designed for a 5'' display (480x320). Responsive design is planned.
 The Windows-Deamon is currently in a rather early state but the source code will
 be uploaded soon. 
 
+![screenshot](./github/Screenshot%202023-05-21%20at%2016.33.20.png)
+
 ## 
 ```json
 {
