@@ -47,10 +47,6 @@ export const useSensorsStore = defineStore("sensors", {
         getCpu(state) {
             return state.latest.data.cpu;
         },
-        // getCpuLoadHistory(state) {
-        //     console.log("[store] get cpu load history");
-        //     return state.history.cpu.load;
-        // }
         getCpuLoadHistory: (state) => state.history.cpu.load,
         getLatestCpuLoad: (state) => state.latest.data.cpu.load.value
     },
@@ -59,7 +55,7 @@ export const useSensorsStore = defineStore("sensors", {
             this.latest = set;
             let loadHistory = this.history.cpu.load;
             let cpuLoad = set.data.cpu.load.value;
-            if (loadHistory.length == 10) {
+            if (loadHistory.length == 5) {
                 loadHistory.shift();
                 loadHistory.push(cpuLoad);
             } else {

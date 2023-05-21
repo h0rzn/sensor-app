@@ -16,7 +16,7 @@ import { Line } from 'vue-chartjs'
 Chart.register(...registerables);
 
 // const maxValues = 5;
-const updateInterval = 2000;
+const updateInterval = 500;
 
 export default {
     name: 'SensorChart',
@@ -25,9 +25,9 @@ export default {
         return {
             updateSetTimer: undefined,
             chartData: {
-                labels: [ 0, 1, 2, 3, 4, 5, 7, 8, 9 ],
+                labels: [ 0, 1, 2, 3, 4 ],
                 datasets: [ { 
-                    data: [] 
+                    data: []
                 }]
             },
             options: {
@@ -88,6 +88,7 @@ export default {
     },
     methods: {
         updateSet() {
+            
             console.log("updating dataset");
             let chart = this.$refs.chartRef.chart;
 
