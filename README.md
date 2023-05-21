@@ -1,4 +1,10 @@
 # sensor-app-ui
+Sensor App is a tool, to monitor a remote hardware device.
+This repository contains the frontend project and is written in Vue.
+
+The UI is designed for a 5'' display (480x320). Responsive design is planned.
+
+Repository for the Windows-Deamon can be found <here>. 
 
 ## 
 ```json
