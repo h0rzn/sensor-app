@@ -12,5 +12,9 @@ export default {
 </script>
 
 <style>
-
+p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #C1C1C1;
+}
 </style>

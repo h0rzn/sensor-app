@@ -56,6 +56,8 @@ export default {
 </script>
 
 <style>
+@import '../assets/styles/colors.css';
+
 @media screen and (max-width: 480px) {
     .hw-item {
         flex-grow: 1;
@@ -63,6 +65,7 @@ export default {
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
+        background-color: var(--dark);
     }
 
     .hw-sensor-head {

@@ -1,17 +1,15 @@
 <template>
     <div class="dashboard">
-        <div class="header">
-        </div>
 
         <div class="content">
-            <div v-if="loading" class="content-centered">
+            <div v-if="loading" class="content-items">
                 <ErrorScreen v-if="conFailure"/>
                 <LoadingSpinner v-else/>
             </div>
 
-            <div v-else class="content-sensors">
-                <HardwareItem typ="CPU" name="i7 13700k"/>
-                <HardwareItem typ="GPU" name="2070 super"/>
+            <div v-else class="content-items">
+                <ComponentItem />
+                <ComponentItem />
             </div>
 
         </div>
@@ -21,17 +19,17 @@
 </template>
 
 <script>
-import HardwareItem from './HardwareItem.vue';
 import { useSensorsStore } from '../store/Sensors.js';
 import LoadingSpinner from './LoadingSpinner.vue';
 import ErrorScreen from './ErrorScreen.vue';
+import ComponentItem from './ComponentItem.vue';
 
 export default {
     components: {
-        HardwareItem,
-        LoadingSpinner,
-        ErrorScreen
-    },
+    LoadingSpinner,
+    ErrorScreen,
+    ComponentItem
+},
     data() {
         return {
             ws: undefined,
@@ -91,40 +89,22 @@ export default {
 <style>
 .dashboard {
     width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
-.header {
-    width: 100%;
-    height: 50px;
-    /* background-color: #e8e8e8; */
-}
-/* .content {
-    width: 100%;
-    height: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
-
 
 .content {
-    flex-grow: 1;
-}
-.content-centered {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    /* background-color: red; */
 }
-.content-sensors {
+.content-items {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #27272B;
 }
 
 </style>
