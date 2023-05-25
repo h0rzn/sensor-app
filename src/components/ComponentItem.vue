@@ -3,10 +3,12 @@
         <div class="item-head">
             <p class="hardware-type">cpu</p>
             <div class="load-section">
-                <p class="load-value">65%</p>
-                <div class="load-indicator-wrapper">
+                <p class="load-value">{{ this.computedLoaderWidth }}</p>
+                
+                <!-- <div class="load-indicator-wrapper">
                     <div id="loader" class="load-indicator" v-bind:style="{ width: computedLoaderWidth, backgroundColor: computedLoaderColor }" />
-                </div>
+                </div> -->
+                <LoadIndicator :update-interval="100" :fetch-func="loadRaw" />
             </div>
         </div>
         
@@ -22,6 +24,7 @@
 
 <script>
 import { useSensorsStore } from '../store/Sensors.js';
+import LoadIndicator from './LoadIndicator.vue';
 
 const loaderColorLow = "#D9D9D9";
 const loaderColorMid = "#16F289";
@@ -31,16 +34,20 @@ export default {
     data() {
         return {
             collectDataTimer: undefined,
+            loaderValue: 0,
             loaderWidth: "0%",
             loaderColor: loaderColorLow
-        }
+        };
     },
     computed: {
+        computedLoader() {
+            return this.loaderValue;
+        },
         computedLoaderWidth() {
-            return this.loaderWidth
+            return this.loaderWidth;
         },
         computedLoaderColor() {
-            return this.loaderColor
+            return this.loaderColor;
         }
     },
     setup() {
@@ -56,13 +63,19 @@ export default {
             this.loaderWidth = loaderValue + "%";
             if (loaderValue < 20) {
                 this.loaderColor = loaderColorLow;
-            } else if (loaderValue < 80) {
+            }
+            else if (loaderValue < 80) {
                 this.loaderColor = loaderColorMid;
-            } else {
+            }
+            else {
                 this.loaderColor = loaderColorHigh;
             }
+        },
+        loadRaw() {
+            return this.store.getLatestCpuLoad;
         }
-    }
+    },
+    components: { LoadIndicator }
 }
 </script>
 
