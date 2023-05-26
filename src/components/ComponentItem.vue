@@ -4,7 +4,7 @@
             <p class="hardware-type">cpu</p>
             <div class="load-section">
                 <p class="load-value">{{ this.computedLoaderWidth }}</p>
-                <LoadIndicator :update-interval="24" :fetch-func="loadRaw" />
+                <LoadIndicator :update-interval="24" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
             </div>
         </div>
     

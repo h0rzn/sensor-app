@@ -15,6 +15,8 @@ export default {
         // function to fetch loader value
         fetchFunc: { type: Function },
         updateInterval: Number,
+        minValue: Number,
+        maxValue: Number
     },
     data() {
         return {
@@ -37,10 +39,12 @@ export default {
     },
     methods: {
         update() {
-            let value = this.fetchFunc();
-            if (isNaN(value)) {
+            let rawValue = this.fetchFunc();
+            if (isNaN(rawValue)) {
                 return;
             }
+
+            let value = this.translate(rawValue);
 
             this.loaderWidth = value + "%";
 
@@ -52,6 +56,10 @@ export default {
                 this.loaderColor = loaderColorHigh;
             }
         },
+        translate(value) {
+            return 100 / this.maxValue * value
+        },
+
     }
 }
 

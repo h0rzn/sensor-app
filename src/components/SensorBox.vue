@@ -5,7 +5,8 @@
             <p class="value" >{{ computedDisplayValue }}</p>
         </div>
        <div class="box-section" id="load-section">
-            <LoadIndicator :update-interval="100" :fetch-func="getValue" />
+            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="100" v-if="this.sensorType == 'temperature'" />
+            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="300" v-else-if="this.sensorType == 'power'" />
        </div>
     </div>
 
@@ -26,7 +27,8 @@ export default {
     data() {
         return {
             displayValue: "",
-            updateTimer: undefined
+            rawValue: 0,
+            updateTimer: undefined,
         }
     },
     computed: {
@@ -49,23 +51,19 @@ export default {
             
             if (this.sensorType == "temperature") {
                 let temp = this.store.getTemperature;
+                this.rawValue = temp;
                 this.displayValue = temp + "°";
             } else if (this.sensorType == "power") {
                 let power = this.store.getPower;
-                this.displayValue = power + "°";
+                this.rawValue = power;
+                this.displayValue = power + "w";
             }
 
         },
 
         getValue() {
-            return this.displayValue;
+            return this.rawValue;
         },
-
-        hasData() {
-            console.log("hasdata");
-            return this.displayValue !== "";
-        }
-
     }
 }
 
