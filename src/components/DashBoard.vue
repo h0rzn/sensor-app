@@ -4,7 +4,7 @@
         <div class="content">
             <div v-if="loading" class="content-items">
                 <ErrorScreen :message="'Websocket connection error'" v-if="conFailure"/>
-                <LoadingSpinner :dim="'48px'" v-else/>
+                <LoadingCircle :dim="'48px'" v-else />
             </div>
 
             <div v-else class="content-items">
@@ -18,16 +18,16 @@
 
 <script>
 import { useSensorsStore } from '../store/Sensors.js';
-import LoadingSpinner from './LoadingSpinner.vue';
 import ErrorScreen from './ErrorScreen.vue';
 import ComponentItem from './ComponentItem.vue';
+import LoadingCircle from './LoadingCircle.vue';
 
 export default {
     components: {
-        LoadingSpinner,
-        ErrorScreen,
-        ComponentItem
-    },
+    ErrorScreen,
+    ComponentItem,
+    LoadingCircle
+},
     data() {
         return {
             ws: undefined,

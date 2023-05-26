@@ -1,15 +1,10 @@
 <template>
     <div class="load-indicator-wrapper">
-        <div id="loader" class="load-indicator" v-bind:style="{ width: computedLoaderWidth, backgroundColor: computedLoaderColor }" />
+        <div id="loader" class="load-indicator" v-bind:style="{ width: computedLoaderWidth }" />
     </div>
 </template>
 
 <script>
-const loaderColorLow = "#D9D9D9";
-const loaderColorMid = "#16F289";
-const loaderColorHigh = "#D86C6C";
-
-
 export default {
     props: {
         // function to fetch loader value
@@ -21,7 +16,6 @@ export default {
     data() {
         return {
             loaderWidth: "0%",
-            loaderColor: loaderColorLow,
             collectTimer: undefined
         }
     },
@@ -32,9 +26,6 @@ export default {
         computedLoaderWidth() {
             return this.loaderWidth
         },
-        computedLoaderColor() {
-            return this.loaderColor
-        }
     },
     methods: {
         update() {
@@ -45,14 +36,6 @@ export default {
             let value = this.translate(rawValue);
 
             this.loaderWidth = value + "%";
-
-            if (value < 20) {
-                this.loaderColor = loaderColorLow;
-            } else if (value < 80) {
-                this.loaderColor = loaderColorMid;
-            } else {
-                this.loaderColor = loaderColorHigh;
-            }
         },
         translate(value) {
             return 100 / this.maxValue * value

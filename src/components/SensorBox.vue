@@ -11,17 +11,20 @@
     </div>
 
     <div class="box" id="loading-box" v-else>
-        <LoadingSpinner :dim="'24px'"/>     
+        <LoadingCircle :dim="'28px'" />
     </div>
 </template>
 
 <script>
 import LoadIndicator from './LoadIndicator.vue';
 import { useSensorsStore } from '../store/Sensors';
-import LoadingSpinner from './LoadingSpinner.vue';
+import LoadingCircle from './LoadingCircle.vue';
 
 export default {
-    components: { LoadIndicator, LoadingSpinner },
+    components: { 
+        LoadIndicator,
+        LoadingCircle,
+    },
     props: {
         sensorType: String,
     },
