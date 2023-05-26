@@ -1,5 +1,5 @@
 <template>
-    <svg id="spinner" width="24" height="24" stroke="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg id="spinner" v-bind:style="{ width: style, height: 'auto'}" stroke="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <g class="spinner_V8m1"><circle class="circle" cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle></g>
     </svg>
         
@@ -7,7 +7,14 @@
 
 <script>
 export default {
-
+    props: {
+        dim: String
+    },
+    computed: {
+        style() {
+            return this.dim
+        }
+    }
 }
 </script>
 
@@ -17,10 +24,9 @@ export default {
 @keyframes spinner_zKoa{100%{transform:rotate(360deg)}}
 @keyframes spinner_YpZS{0%{stroke-dasharray:0 150;stroke-dashoffset:0}47.5%{stroke-dasharray:42 150;stroke-dashoffset:-16}95%,100%{stroke-dasharray:42 150;stroke-dashoffset:-59}}
 
-#spinner {
-    width: 50px;
+/* #spinner {
     height: auto;
-}
+} */
 
 .circle {
     stroke: #818181;

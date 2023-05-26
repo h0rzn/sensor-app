@@ -1,7 +1,21 @@
 import { defineStore } from 'pinia';
 
 export const useSensorsStore = defineStore("sensors", {
-    state: () => ({ 
+    state: () => ({
+        registered: {
+            "hostname": "test-pc",
+            "ip": "127.0.0.1",
+            "registered": [
+                {
+                    "type": "cpu",
+                    "name": "i7 13700k",
+                },
+                {
+                    "type": "gpu",
+                    "name": "RTX 2070 Super",
+                }
+            ]
+        },
         latest: {
             "type": "sensors",
             "data": {
@@ -44,6 +58,33 @@ export const useSensorsStore = defineStore("sensors", {
         },
     }),
     getters: {
+        // get sensor by hw type
+        getTempByHardware(state, hardware) {
+            console.log(hardware);
+            return state.latest.cpu.temperature.value
+        },
+
+        getPowerByHardware(state, hardware) {
+            console.log(hardware);
+            return state.latest.cpu.temperature.value;
+        },
+
+        // testing getts
+        getLoad(state) {
+            return state.latest.data.cpu.load.value
+        },
+        getPower(state) {
+            return state.latest.data.cpu.power.value
+        },
+        getTemperature(state) {
+            return state.latest.data.cpu.temperature.value
+        },
+
+
+
+        getByHardwareType(state, type) {
+            return state.latest.data[type];
+        },
         getCpu(state) {
             return state.latest.data.cpu;
         },

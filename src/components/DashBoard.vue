@@ -4,7 +4,7 @@
         <div class="content">
             <div v-if="loading" class="content-items">
                 <ErrorScreen v-if="conFailure"/>
-                <LoadingSpinner v-else/>
+                <LoadingSpinner :dim="'48px'" v-else/>
             </div>
 
             <div v-else class="content-items">

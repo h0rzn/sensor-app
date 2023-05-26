@@ -4,20 +4,15 @@
             <p class="hardware-type">cpu</p>
             <div class="load-section">
                 <p class="load-value">{{ this.computedLoaderWidth }}</p>
-                
-                <!-- <div class="load-indicator-wrapper">
-                    <div id="loader" class="load-indicator" v-bind:style="{ width: computedLoaderWidth, backgroundColor: computedLoaderColor }" />
-                </div> -->
-                <LoadIndicator :update-interval="100" :fetch-func="loadRaw" />
+                <LoadIndicator :update-interval="24" :fetch-func="loadRaw" />
             </div>
         </div>
-        
+    
 
-        <div class="sensor-box">
-        </div>
+        <SensorBox sensor-type="power" />
 
-        <div class="sensor-box">
-        </div>
+        <SensorBox sensor-type="temperature" />
+
     </div>
 
 </template>
@@ -25,6 +20,7 @@
 <script>
 import { useSensorsStore } from '../store/Sensors.js';
 import LoadIndicator from './LoadIndicator.vue';
+import SensorBox from './SensorBox.vue';
 
 const loaderColorLow = "#D9D9D9";
 const loaderColorMid = "#16F289";
@@ -73,13 +69,13 @@ export default {
         },
         loadRaw() {
             return this.store.getLatestCpuLoad;
-        }
+        },
     },
-    components: { LoadIndicator }
+    components: { LoadIndicator, SensorBox }
 }
 </script>
 
-<style>
+<style scoped>
 .item {
     height: 100%;
     width: 50%;

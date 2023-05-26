@@ -65,7 +65,7 @@ export default {
 }
 
 .load-indicator {
-    height: 3px;
+    height: 4px;
     background: rgb(22,242,137);
     background: linear-gradient(90deg, rgba(22,242,137,1) 0%, rgba(22, 242, 213, 1) 100%);
     border-radius: 10px;

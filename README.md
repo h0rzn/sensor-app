@@ -2,14 +2,27 @@
 Sensor App is a tool, to monitor a remote hardware device.
 This repository contains the frontend project and is written in Vue.
 
-The UI is designed for a 5'' display (480x320). Responsive design is planned.
+The UI is designed for a 3.5'' display (480x320). Responsive design is planned.
 
-The Windows-Deamon is currently in a rather early state but the source code will
-be uploaded soon. 
+The Windows-Deamon is currently in a rather early state but the source code will be uploaded soon. 
 
-![screenshot](./github/Screenshot%202023-05-21%20at%2016.33.20.png)
+<!-- ![screenshot](./github/Screenshot%202023-05-21%20at%2016.33.20.png) -->
 
-## 
+### Initial Message
+```json
+{
+    "hostname": "<hostname of pc daemon is running on>",
+    "ip": "<ip of pc daemon is running on>",
+    "registered": [
+        {
+            "type": "cpu | gpu",
+            "name": "<name like i7 13700k>",
+        }
+    ]
+}
+```
+
+### Generic Sensor Data Message
 ```json
 {
     "type": "sensors",
@@ -46,7 +59,10 @@ be uploaded soon.
         } 
     }
 }
+```
 
+### Error Message
+```json
 {
     "type": "error",
     "msg": "<error-message>"
