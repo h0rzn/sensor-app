@@ -21,6 +21,7 @@ import { useSensorsStore } from '../store/Sensors';
 import LoadingSpinner from './LoadingSpinner.vue';
 
 export default {
+    components: { LoadIndicator, LoadingSpinner },
     props: {
         sensorType: String,
     },
@@ -36,7 +37,6 @@ export default {
             return this.displayValue;
         }
     },
-    components: { LoadIndicator, LoadingSpinner },
     setup() {
         const store = useSensorsStore();
         return { store };
@@ -46,9 +46,6 @@ export default {
     },
     methods: {
         getHardwareData() {
-            // this.raw = this.store.getByHardwareType;
-
-            
             if (this.sensorType == "temperature") {
                 let temp = this.store.getTemperature;
                 this.rawValue = temp;
@@ -58,7 +55,6 @@ export default {
                 this.rawValue = power;
                 this.displayValue = power + "w";
             }
-
         },
 
         getValue() {

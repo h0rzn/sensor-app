@@ -3,16 +3,14 @@
         <div class="item-head">
             <p class="hardware-type">cpu</p>
             <div class="load-section">
-                <p class="load-value">{{ this.computedLoaderWidth }}</p>
-                <LoadIndicator :update-interval="24" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
+                <p class="load-value">{{ this.computedLoaderText }}</p>
+                <LoadIndicator :update-interval="1000" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
             </div>
         </div>
-    
 
         <SensorBox sensor-type="power" />
 
         <SensorBox sensor-type="temperature" />
-
     </div>
 
 </template>
@@ -22,56 +20,35 @@ import { useSensorsStore } from '../store/Sensors.js';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
 
-const loaderColorLow = "#D9D9D9";
-const loaderColorMid = "#16F289";
-const loaderColorHigh = "#D86C6C";
-
 export default {
+    components: { LoadIndicator, SensorBox },
     data() {
         return {
-            collectDataTimer: undefined,
-            loaderValue: 0,
-            loaderWidth: "0%",
-            loaderColor: loaderColorLow
+            fetchTimer: undefined,
+            loaderText: "0%",
         };
     },
     computed: {
-        computedLoader() {
-            return this.loaderValue;
+        computedLoaderText() {
+            return this.loaderText;
         },
-        computedLoaderWidth() {
-            return this.loaderWidth;
-        },
-        computedLoaderColor() {
-            return this.loaderColor;
-        }
     },
     setup() {
         const store = useSensorsStore();
         return { store };
     },
     mounted() {
-        this.collectDataTimer = setInterval(this.collectData, 1000);
+        this.fetchTimer = setInterval(this.fetchData, 1000);
     },
     methods: {
-        collectData() {
-            let loaderValue = this.store.getLatestCpuLoad;
-            this.loaderWidth = loaderValue + "%";
-            if (loaderValue < 20) {
-                this.loaderColor = loaderColorLow;
-            }
-            else if (loaderValue < 80) {
-                this.loaderColor = loaderColorMid;
-            }
-            else {
-                this.loaderColor = loaderColorHigh;
-            }
-        },
         loadRaw() {
             return this.store.getLatestCpuLoad;
         },
+        fetchData() {
+            let loaderValue = this.loadRaw();
+            this.loaderText = loaderValue + "%";
+        },
     },
-    components: { LoadIndicator, SensorBox }
 }
 </script>
 

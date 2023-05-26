@@ -24,7 +24,6 @@ export default {
             loaderColor: loaderColorLow,
             collectTimer: undefined
         }
-
     },
     mounted() {
         this.collectTimer = setInterval(this.update, this.updateInterval);
@@ -43,7 +42,6 @@ export default {
             if (isNaN(rawValue)) {
                 return;
             }
-
             let value = this.translate(rawValue);
 
             this.loaderWidth = value + "%";
@@ -68,7 +66,6 @@ export default {
 <style>
 .load-indicator-wrapper {
     width: 100%;
-    /* height: 3px; */
     background-color: #6A6A6A;
 }
 

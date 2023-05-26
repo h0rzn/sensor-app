@@ -3,7 +3,7 @@
 
         <div class="content">
             <div v-if="loading" class="content-items">
-                <ErrorScreen v-if="conFailure"/>
+                <ErrorScreen :message="'Websocket connection error'" v-if="conFailure"/>
                 <LoadingSpinner :dim="'48px'" v-else/>
             </div>
 
@@ -11,9 +11,7 @@
                 <ComponentItem />
                 <ComponentItem />
             </div>
-
-        </div>
-        
+        </div> 
 
     </div>
 </template>
@@ -26,10 +24,10 @@ import ComponentItem from './ComponentItem.vue';
 
 export default {
     components: {
-    LoadingSpinner,
-    ErrorScreen,
-    ComponentItem
-},
+        LoadingSpinner,
+        ErrorScreen,
+        ComponentItem
+    },
     data() {
         return {
             ws: undefined,
@@ -44,13 +42,10 @@ export default {
     async mounted() {
         console.log("created, ws")
 
-        await this.connect().then(() => {}).catch((err) => {
+        await this.connect().catch((err) => {
             this.conFailure = true;
             console.log("async connect: ERROR", err);
         })
-    },
-    unmounted() {
-        // this.ws.close()
     },
     methods: {
         connect() {
@@ -60,7 +55,6 @@ export default {
 
                 con.addEventListener("open", () => {
                     console.log("open event");
-                    // clearTimeout(conTimeout);
                     resolve();
                 });
                 con.addEventListener("close", () => {
