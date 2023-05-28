@@ -4,10 +4,15 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {"message": String}
-};
+<script setup lang="ts">
+import { withDefaults, defineProps } from 'vue';
+
+export interface Props {
+    message?: string
+}
+withDefaults(defineProps<Props>(), {
+    message: "An unkown error ocurred"
+});
 </script>
 
 <style>

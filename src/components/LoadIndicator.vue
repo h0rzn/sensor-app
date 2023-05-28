@@ -1,29 +1,34 @@
 <template>
     <div class="load-indicator-wrapper">
-        <div id="loader" class="load-indicator" v-bind:style="{ width: computedLoaderWidth }" />
+        <div id="loader" class="load-indicator" v-bind:style="computedLoaderWidth" />
+
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, CSSProperties } from 'vue';
+
+export default defineComponent({
     props: {
         // function to fetch loader value
-        fetchFunc: { type: Function },
+        fetchFunc: { type: Function, required: true },
         updateInterval: Number,
-        minValue: Number,
-        maxValue: Number
+        minValue: { type: Number, required: true },
+        maxValue: { type: Number, required: true }
     },
-    data() {
+    data() : {
+        loaderWidth: CSSProperties,
+        collectTimer?: number
+    } {
         return {
-            loaderWidth: "0%",
-            collectTimer: undefined
+            loaderWidth: { width: "10%" }
         }
     },
     mounted() {
         this.collectTimer = setInterval(this.update, this.updateInterval);
     },
     computed: {
-        computedLoaderWidth() {
+        computedLoaderWidth(): CSSProperties {
             return this.loaderWidth
         },
     },
@@ -35,15 +40,16 @@ export default {
             }
             let value = this.translate(rawValue);
 
-            this.loaderWidth = value + "%";
+            this.loaderWidth.width = value + "%";
         },
-        translate(value) {
+
+        translate(value: number): number {
             return 100 / this.maxValue * value
         },
 
     }
-}
 
+})
 </script>
 
 <style>

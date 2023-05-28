@@ -80,6 +80,13 @@ export const useSensorsStore = defineStore("sensors", {
             return state.latest.data.cpu.temperature.value
         },
 
+        TgetTemp(state) {
+            return state.latest.data.cpu.temperature
+        },
+        TgetPower(state) {
+            return state.latest.data.cpu.power
+        },
+
 
 
         getByHardwareType(state, type) {

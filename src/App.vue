@@ -2,7 +2,7 @@
   <DashBoard />
 </template>
 
-<script>
+<script lang="ts">
 import DashBoard from './components/DashBoard.vue';
 
 export default {

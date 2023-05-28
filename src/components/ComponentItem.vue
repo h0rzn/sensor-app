@@ -3,7 +3,7 @@
         <div class="item-head">
             <p class="hardware-type">cpu</p>
             <div class="load-section">
-                <p class="load-value">{{ this.computedLoaderText }}</p>
+                <p class="load-value">{{ computedLoaderText }}</p>
                 <LoadIndicator :update-interval="1000" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
             </div>
         </div>
@@ -15,16 +15,19 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { useSensorsStore } from '../store/Sensors.js';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
 
-export default {
+export default defineComponent({
     components: { LoadIndicator, SensorBox },
-    data() {
+    data() : {
+        fetchTimer?: number,
+        loaderText: string,
+    } {
         return {
-            fetchTimer: undefined,
             loaderText: "0%",
         };
     },
@@ -41,7 +44,7 @@ export default {
         this.fetchTimer = setInterval(this.fetchData, 1000);
     },
     methods: {
-        loadRaw() {
+        loadRaw() : number {
             return this.store.getLatestCpuLoad;
         },
         fetchData() {
@@ -49,7 +52,7 @@ export default {
             this.loaderText = loaderValue + "%";
         },
     },
-}
+})
 </script>
 
 <style scoped>

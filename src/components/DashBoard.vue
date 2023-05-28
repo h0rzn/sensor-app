@@ -3,7 +3,7 @@
 
         <div class="content">
             <div v-if="loading" class="content-items">
-                <ErrorScreen :message="'Websocket connection error'" v-if="conFailure"/>
+                <ErrorScreen :message="'websocket connection error'" v-if="conFailure"/>
                 <LoadingCircle :dim="'48px'" v-else />
             </div>
 
@@ -16,21 +16,25 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useSensorsStore } from '../store/Sensors.js';
 import ErrorScreen from './ErrorScreen.vue';
 import ComponentItem from './ComponentItem.vue';
 import LoadingCircle from './LoadingCircle.vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     components: {
-    ErrorScreen,
-    ComponentItem,
-    LoadingCircle
-},
-    data() {
+        ErrorScreen,
+        ComponentItem,
+        LoadingCircle
+    },
+    data() : {
+        ws?: WebSocket,
+        loading: boolean,
+        conFailure: boolean
+    } {
         return {
-            ws: undefined,
             loading: true,
             conFailure: false,
         }
@@ -42,42 +46,45 @@ export default {
     async mounted() {
         console.log("created, ws")
 
-        await this.connect().catch((err) => {
+        await this.connect().then((ws: WebSocket) => {
+            this.loading = false;
+            this.ws = ws;
+        }).catch(() => {
             this.conFailure = true;
-            console.log("async connect: ERROR", err);
-        })
+        });
     },
     methods: {
-        connect() {
+        connect() : Promise<WebSocket> {
             return new Promise((resolve, reject) => {
                 console.log("attempt connect")
-                var con = new WebSocket("ws://localhost:8000");
+                // const ipAddr = "192.168.178.121";
+                const ipAddr = "localhost";
+                var con = new WebSocket("ws://" + ipAddr + ":8000");
 
-                con.addEventListener("open", () => {
-                    console.log("open event");
-                    resolve();
-                });
-                con.addEventListener("close", () => {
-                    console.log("ws: closed")
-                })
-                con.addEventListener("message", (msg) => {
-                    const obj = JSON.parse(msg.data);
-                    this.store.set(obj);
+                con.onopen = () => {
+                    // register handlers
+                    con.onclose = () => console.log("ws closed");
 
-                    if (this.loading) {
-                        this.loading = false;
-                    }
-                });
-                con.addEventListener("error", (err) => {
-                    reject(err);
-                })
+                    con.onmessage = (msg: MessageEvent) => {
+                        const obj = JSON.parse(msg.data);
+                        this.store.set(obj);
+                    };
 
-                this.ws = con;
+                    con.onerror = () => {
+                        console.log("ws error");
+                    };
+
+                    resolve(con);
+                };
+
+                con.onerror = () => {
+                    reject();
+                } 
             });
         },
     }
     
-}
+})
 </script>
 
 <style>

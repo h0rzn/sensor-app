@@ -2,24 +2,20 @@
     <span class="loader" v-bind:style="{ width: computedDim, height: computedDim }"></span>
 </template>
 
-<script>
-export default {
-    props: {
-        dim: String
-    },
-    computed: {
-        computedDim() {
-            return this.dim
-        }
-    }
-}
+<script setup lang="ts">
+import { computed } from 'vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    dim: String
+})
+
+const computedDim = computed(() => props.dim);
 </script>
 
 <style>
 .loader {
   position: relative;
-  /* width: 50px;
-  height: 50px; */
 }
 
 .loader:before , .loader:after{

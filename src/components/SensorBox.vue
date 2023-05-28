@@ -5,8 +5,8 @@
             <p class="value" >{{ computedDisplayValue }}</p>
         </div>
        <div class="box-section" id="load-section">
-            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="100" v-if="this.sensorType == 'temperature'" />
-            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="300" v-else-if="this.sensorType == 'power'" />
+            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="100" v-if="sensorType == 'temperature'" />
+            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="300" v-else-if="sensorType == 'power'" />
        </div>
     </div>
 
@@ -15,24 +15,28 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import LoadIndicator from './LoadIndicator.vue';
 import { useSensorsStore } from '../store/Sensors';
 import LoadingCircle from './LoadingCircle.vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     components: { 
         LoadIndicator,
         LoadingCircle,
     },
     props: {
-        sensorType: String,
+        sensorType: { type: String, required: true},
     },
-    data() {
+    data() : {
+        displayValue: string,
+        rawValue: number,
+        updateTimer?: number
+    } {
         return {
             displayValue: "",
             rawValue: 0,
-            updateTimer: undefined,
         }
     },
     computed: {
@@ -60,11 +64,11 @@ export default {
             }
         },
 
-        getValue() {
+        getValue() : number {
             return this.rawValue;
         },
     }
-}
+});
 
 </script>
 
