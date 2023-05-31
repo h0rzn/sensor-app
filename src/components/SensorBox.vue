@@ -49,7 +49,7 @@ export default defineComponent({
         return { store };
     },
     mounted() {
-        this.updateTimer = setInterval(this.getHardwareData, 1000);
+        this.updateTimer = window.setInterval(this.getHardwareData, 1000);
     },
     methods: {
         getHardwareData() {

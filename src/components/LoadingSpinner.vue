@@ -5,30 +5,15 @@
         
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { computed } from 'vue';
+import { defineProps } from 'vue';
 
-
-export interface Props {
-    dim?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    dim: "24"
+const props = defineProps({
+    dim: String
 })
 
 const computedDim = computed(() => props.dim);
-
-export default {
-    props: {
-        dim: String
-    },
-    computed: {
-        computedDim() {
-            return this.dim
-        }
-    }
-}
 </script>
 
 <style>

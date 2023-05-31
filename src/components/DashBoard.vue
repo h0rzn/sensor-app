@@ -23,6 +23,7 @@ import ComponentItem from './ComponentItem.vue';
 import LoadingCircle from './LoadingCircle.vue';
 import { defineComponent } from 'vue';
 
+
 export default defineComponent({
     components: {
         ErrorScreen,
@@ -44,12 +45,12 @@ export default defineComponent({
         return { store };
     },
     async mounted() {
-        console.log("created, ws")
-
         await this.connect().then((ws: WebSocket) => {
             this.loading = false;
             this.ws = ws;
+            console.log("connected", ws)
         }).catch(() => {
+            console.log("connection failed");
             this.conFailure = true;
         });
     },
@@ -81,9 +82,9 @@ export default defineComponent({
                     reject();
                 } 
             });
-        },
+            
+        },    
     }
-    
 })
 </script>
 

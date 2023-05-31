@@ -32,7 +32,7 @@ export default defineComponent({
         };
     },
     computed: {
-        computedLoaderText() {
+        computedLoaderText(): string {
             return this.loaderText;
         },
     },
@@ -41,7 +41,7 @@ export default defineComponent({
         return { store };
     },
     mounted() {
-        this.fetchTimer = setInterval(this.fetchData, 1000);
+        this.fetchTimer = window.setInterval(this.fetchData, 1000);
     },
     methods: {
         loadRaw() : number {

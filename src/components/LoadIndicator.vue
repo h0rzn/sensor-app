@@ -25,7 +25,7 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.collectTimer = setInterval(this.update, this.updateInterval);
+        this.collectTimer = window.setInterval(this.update, this.updateInterval);
     },
     computed: {
         computedLoaderWidth(): CSSProperties {
