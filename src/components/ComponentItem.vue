@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useSensorsStore } from '../store/Sensors.js';
+import { useSensors } from '../store/Sensors';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
 
@@ -37,7 +37,7 @@ export default defineComponent({
         },
     },
     setup() {
-        const store = useSensorsStore();
+        const store = useSensors();
         return { store };
     },
     mounted() {
@@ -45,7 +45,9 @@ export default defineComponent({
     },
     methods: {
         loadRaw() : number {
-            return this.store.getLatestCpuLoad;
+            // return this.store.getByType("cpu")?.load || -1;
+            console.log(this.store.getByType("cpu"))
+            return 99;
         },
         fetchData() {
             let loaderValue = this.loadRaw();

@@ -43,12 +43,33 @@ data_set = {
     }
 }
 
+data_set_new = {
+    "type": "sensors",
+    "data": [
+        {
+            "type": "cpu",
+            "name": "i7 13700k",
+            "temperature": 54.3,
+            "load": 56,
+            "power": 120
+        },
+        {
+            "type": "gpu",
+            "name": "RTX 2070 Super",
+            "temperature": 54.3,
+            "load": 56,
+            "power": 120
+        }
+    ]
+}
+
 def randomized_set():
-    set = data_set
-    set["data"]["cpu"]["temperature"]["value"] = random.randint(0, 100)
-    set["data"]["cpu"]["load"]["value"] = random.randint(0, 50)
-    set["data"]["cpu"]["power"]["value"] = random.randint(30, 180)
-    return json.dumps(set)
+    set = data_set_new
+    for item in set["data"]:
+        item["temperature"] = random.randint(0, 100)
+        item["load"] = random.randint(0, 50)
+        item["power"]  = random.randint(30, 180)
+    return set
 
 
 # create handler for each connection
@@ -57,8 +78,9 @@ async def handler(websocket, path):
 
     while True:
         try:
-            print("sending", random.randint(0, 999))
-            await websocket.send(randomized_set())
+            set = randomized_set()
+            print("sending", set)
+            await websocket.send(json.dumps(set))
 
         except websockets.exceptions.ConnectionClosed:
             print("<disconnect>")

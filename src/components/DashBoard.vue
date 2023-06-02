@@ -17,12 +17,13 @@
 </template>
 
 <script lang="ts">
-import { useSensorsStore } from '../store/Sensors.js';
+import { useSensors } from "../store/Sensors";
 import ErrorScreen from './ErrorScreen.vue';
 import ComponentItem from './ComponentItem.vue';
 import LoadingCircle from './LoadingCircle.vue';
 import { defineComponent } from 'vue';
 
+import DaemonHandler from '../DaemonHandler';
 
 export default defineComponent({
     components: {
@@ -33,7 +34,8 @@ export default defineComponent({
     data() : {
         ws?: WebSocket,
         loading: boolean,
-        conFailure: boolean
+        conFailure: boolean,
+        dh?: DaemonHandler
     } {
         return {
             loading: true,
@@ -41,50 +43,19 @@ export default defineComponent({
         }
     },
     setup() {
-        const store = useSensorsStore();
+        const store = useSensors();
         return { store };
     },
     async mounted() {
-        await this.connect().then((ws: WebSocket) => {
+        this.dh = new DaemonHandler("ws://localhost:8000", "python-test-server")
+        this.dh.run().then(() => {
             this.loading = false;
-            this.ws = ws;
-            console.log("connected", ws)
+            console.log("connected");
         }).catch(() => {
             console.log("connection failed");
             this.conFailure = true;
-        });
+        })
     },
-    methods: {
-        connect() : Promise<WebSocket> {
-            return new Promise((resolve, reject) => {
-                console.log("attempt connect")
-                // const ipAddr = "192.168.178.121";
-                const ipAddr = "localhost";
-                var con = new WebSocket("ws://" + ipAddr + ":8000");
-
-                con.onopen = () => {
-                    // register handlers
-                    con.onclose = () => console.log("ws closed");
-
-                    con.onmessage = (msg: MessageEvent) => {
-                        const obj = JSON.parse(msg.data);
-                        this.store.set(obj);
-                    };
-
-                    con.onerror = () => {
-                        console.log("ws error");
-                    };
-
-                    resolve(con);
-                };
-
-                con.onerror = () => {
-                    reject();
-                } 
-            });
-            
-        },    
-    }
 })
 </script>
 
