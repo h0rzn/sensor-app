@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { Components } from '../types';
 
 export type Set = {
     type: string;
@@ -15,35 +16,26 @@ type State = {
 export const useSensors = defineStore("sensors", {
     state: (): State => ({
         latest: [
-
+            {
+                type: "mytype",
+                name: "myname",
+                temperature: 7,
+                load: 7,
+                power: 7
+            }
         ]
     }),
     getters: {
-        getByType({ latest }): (type: string) => Set | undefined {
-            return ((type: string) => {
-                // latest.forEach((set) => {
-                //     if (set.type == type) {
-                //         return set
-                //     }
-                // })
-                // return undefined
-
-
-                const fake: Set = {
-                    type: "cpu",
-                    name: "name ehre",
-                    temperature: 80.1,
-                    load: 54,
-                    power: 150
-                };
-
-                return fake;
-
-                // console.log(latest);
-                // return latest.find((set) => set.type == type);
-            });
+        getByType(state): (typ: Components) => Set | undefined {
+            return (typ: Components): Set | undefined => {
+                return state.latest.find((set: Set) => set.type == typ)
+            } 
         }
-
+        // getCustomerById({ customers }): (id: string) => Customer | undefined {
+        //     return (id: string): Customer | undefined => {
+        //       return customers.find((customer) => customer.id === id)
+        //     }
+        //   },
     },
     actions: {
         update(newSet: Set[]) {

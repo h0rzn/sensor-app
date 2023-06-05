@@ -1,31 +1,36 @@
 <template>
     <div class="item">
         <div class="item-head">
-            <p class="hardware-type">cpu</p>
+            <p class="hardware-type">{{ type }}</p>
             <div class="load-section">
                 <p class="load-value">{{ computedLoaderText }}</p>
                 <LoadIndicator :update-interval="1000" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
             </div>
         </div>
 
-        <SensorBox sensor-type="power" />
+        <SensorBox :component-type="type" sensor-type="power" />
 
-        <SensorBox sensor-type="temperature" />
+        <SensorBox :component-type="type" sensor-type="temperature" />
     </div>
 
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { useSensors } from '../store/Sensors';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
+import type { Components } from '../types';
 
 export default defineComponent({
     components: { LoadIndicator, SensorBox },
+    props: {
+        type: { type: String as PropType<Components>, required: true }
+    },
     data() : {
-        fetchTimer?: number,
+        type?: Components,
         loaderText: string,
+        fetchTimer?: number,
     } {
         return {
             loaderText: "0%",
@@ -45,9 +50,7 @@ export default defineComponent({
     },
     methods: {
         loadRaw() : number {
-            // return this.store.getByType("cpu")?.load || -1;
-            console.log(this.store.getByType("cpu"))
-            return 99;
+            return this.store.getByType(this.type)?.load || -1;
         },
         fetchData() {
             let loaderValue = this.loadRaw();

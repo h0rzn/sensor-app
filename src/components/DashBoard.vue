@@ -8,8 +8,8 @@
             </div>
 
             <div v-else class="content-items">
-                <ComponentItem />
-                <ComponentItem />
+                <ComponentItem :type="comp(0)" />
+                <ComponentItem :type="comp(1)" />
             </div>
         </div> 
 
@@ -22,8 +22,9 @@ import ErrorScreen from './ErrorScreen.vue';
 import ComponentItem from './ComponentItem.vue';
 import LoadingCircle from './LoadingCircle.vue';
 import { defineComponent } from 'vue';
+import { Components } from '../types';
 
-import DaemonHandler from '../DaemonHandler';
+import { Streamer, WebSocketStreamer } from "@/Streamer";
 
 export default defineComponent({
     components: {
@@ -32,10 +33,9 @@ export default defineComponent({
         LoadingCircle
     },
     data() : {
-        ws?: WebSocket,
         loading: boolean,
         conFailure: boolean,
-        dh?: DaemonHandler
+        streamer?: Streamer,
     } {
         return {
             loading: true,
@@ -47,8 +47,8 @@ export default defineComponent({
         return { store };
     },
     async mounted() {
-        this.dh = new DaemonHandler("ws://localhost:8000", "python-test-server")
-        this.dh.run().then(() => {
+        this.streamer = new WebSocketStreamer("ws://localhost:8000");
+        this.streamer.start().then(() => {
             this.loading = false;
             console.log("connected");
         }).catch(() => {
@@ -56,6 +56,15 @@ export default defineComponent({
             this.conFailure = true;
         })
     },
+    methods: {
+        comp(n: number): Components {
+            if (n == 0) {
+                return Components.CPU;
+            } else {
+                return Components.GPU;
+            }
+        }
+    }
 })
 </script>
 

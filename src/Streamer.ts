@@ -3,7 +3,7 @@ import { useSensors, Set } from "./store/Sensors";
 
 export interface Streamer {
     streamerType: string;
-    start(resource: string): Promise<void>
+    start(): Promise<void>
     stop(): void;
 }
 
@@ -13,7 +13,7 @@ enum MessageType {
 }
 
 type WSMessage = {
-    msgType: string;
+    type: string;
     data: Set[];
 }
 
@@ -28,10 +28,9 @@ export class WebSocketStreamer implements Streamer {
         this.store = useSensors();
     }
 
-    start(resource: string): Promise<void> {
-        console.log("ws streamer: start", resource)
+    start(): Promise<void> {
         return new Promise((resolve, reject) => {
-            const con: WebSocket = new WebSocket(resource);
+            const con: WebSocket = new WebSocket(this.url);
 
             // onopen handler
             con.onopen = () => {
@@ -57,13 +56,17 @@ export class WebSocketStreamer implements Streamer {
     }
 
     handleMessage(raw: MessageEvent) {
-        const set: WSMessage = JSON.parse(raw.data);
-
-        if (set) {
-            console.log(set);
-            this.store.update(set);
-        } else {
-            console.log("set undefined");
+        const msg: WSMessage = JSON.parse(raw.data);
+        console.log(msg.type, msg);
+        if (msg) {
+            switch (msg.type) {
+                case "sensors":
+                    console.log("handling", msg.type);
+                    this.store.update(msg.data);
+                    break;
+                default:
+                    break;
+            }
         }
     }
     
