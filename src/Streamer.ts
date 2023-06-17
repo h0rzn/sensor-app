@@ -1,15 +1,11 @@
 import { Store } from "pinia";
 import { useSensors, Set } from "./store/Sensors";
+import {  MessageTypes } from "./types";
 
 export interface Streamer {
     streamerType: string;
     start(): Promise<void>
     stop(): void;
-}
-
-enum MessageType {
-    SensorSet = "sensors",
-    Error = "error",
 }
 
 type WSMessage = {
@@ -60,9 +56,11 @@ export class WebSocketStreamer implements Streamer {
         console.log(msg.type, msg);
         if (msg) {
             switch (msg.type) {
-                case "sensors":
+                case MessageTypes.Sensors:
                     console.log("handling", msg.type);
                     this.store.update(msg.data);
+                    break;
+                case MessageTypes.Error:
                     break;
                 default:
                     break;

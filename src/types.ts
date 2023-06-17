@@ -1,5 +1,4 @@
-export enum Components {
-    CPU = "cpu",
-    GPU = "gpu"
+export enum MessageTypes {
+    Sensors = "sensors",
+    Error = "error"
 }
-

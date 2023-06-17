@@ -8,8 +8,8 @@
             </div>
 
             <div v-else class="content-items">
-                <ComponentItem :type="comp(0)" />
-                <ComponentItem :type="comp(1)" />
+                <ComponentItem :type="'cpu'" />
+                <ComponentItem :type="'gpu'" />
             </div>
         </div> 
 
@@ -22,7 +22,6 @@ import ErrorScreen from './ErrorScreen.vue';
 import ComponentItem from './ComponentItem.vue';
 import LoadingCircle from './LoadingCircle.vue';
 import { defineComponent } from 'vue';
-import { Components } from '../types';
 
 import { Streamer, WebSocketStreamer } from "@/Streamer";
 
@@ -56,15 +55,6 @@ export default defineComponent({
             this.conFailure = true;
         })
     },
-    methods: {
-        comp(n: number): Components {
-            if (n == 0) {
-                return Components.CPU;
-            } else {
-                return Components.GPU;
-            }
-        }
-    }
 })
 </script>
 

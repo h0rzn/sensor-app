@@ -19,8 +19,7 @@
 import LoadIndicator from './LoadIndicator.vue';
 import { useSensors } from '@/store/Sensors';
 import LoadingCircle from './LoadingCircle.vue';
-import { PropType, defineComponent } from 'vue';
-import type { Components } from '@/types';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
     components: { 
@@ -29,7 +28,7 @@ export default defineComponent({
     },
     props: {
         sensorType: { type: String, required: true},
-        componentType: { type: String as PropType<Components>, required: true}
+        componentType: { type: String, required: true}
     },
     data() : {
         displayValue: string,
@@ -62,7 +61,7 @@ export default defineComponent({
                     this.displayValue = temp + "°";
                 }
             } else if (this.sensorType == "power") {
-                let power = this.store.getByType(this.componentType)?.temperature;
+                let power = this.store.getByType(this.componentType)?.power;
                 if (power) {
                     this.rawValue = power;
                     this.displayValue = power + "w";

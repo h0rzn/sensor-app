@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { Components } from '../types';
 
 export type Set = {
     type: string;
@@ -26,16 +25,11 @@ export const useSensors = defineStore("sensors", {
         ]
     }),
     getters: {
-        getByType(state): (typ: Components) => Set | undefined {
-            return (typ: Components): Set | undefined => {
+        getByType(state): (typ: string) => Set | undefined {
+            return (typ: string): Set | undefined => {
                 return state.latest.find((set: Set) => set.type == typ)
-            } 
+            }
         }
-        // getCustomerById({ customers }): (id: string) => Customer | undefined {
-        //     return (id: string): Customer | undefined => {
-        //       return customers.find((customer) => customer.id === id)
-        //     }
-        //   },
     },
     actions: {
         update(newSet: Set[]) {

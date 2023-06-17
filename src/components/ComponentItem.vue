@@ -16,19 +16,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { useSensors } from '../store/Sensors';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
-import type { Components } from '../types';
 
 export default defineComponent({
     components: { LoadIndicator, SensorBox },
     props: {
-        type: { type: String as PropType<Components>, required: true }
+        type: { type: String, required: true }
     },
     data() : {
-        type?: Components,
+        type?: string,
         loaderText: string,
         fetchTimer?: number,
     } {

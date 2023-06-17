@@ -7,42 +7,6 @@ import random
 
 SEND_DATA = "test123"
 
-data_set = {
-    "type": "sensors",
-    "data": {
-        "cpu": {
-            "name": "i7 13700k",
-            "temperature": {
-                "value": 63,
-                "unit": "degrees"
-            },
-            "load": {
-                "value": 70,
-                "unit": "percent"
-            },
-            "power": {
-                "value": 108,
-                "unit": "watt"
-            }
-        },
-        "gpu": {
-            "name": "RTX 2070 Super",
-            "temperature": {
-                "value": 63,
-                "unit": "degrees"
-            },
-            "load": {
-                "value": 70,
-                "unit": "percent"
-            },
-            "power": {
-                "value": 108,
-                "unit": "watt"
-            }
-        } 
-    }
-}
-
 data_set_new = {
     "type": "sensors",
     "data": [
@@ -63,6 +27,28 @@ data_set_new = {
     ]
 }
 
+class CON:
+    def __init__(self, ws):
+        self.con = ws
+
+    def randomized_set(self):
+        set = data_set_new
+        for item in set["data"]:
+            item["temperature"] = random.randint(0, 100)
+            item["load"] = random.randint(0, 50)
+            item["power"]  = random.randint(30, 180)
+        return set
+    
+    async def handler(websocket, path):
+        print("handling")
+
+        while True:
+            print("sending")
+            await websocket.send(json.dumps(randomized_set()))
+            
+            time.sleep(1)
+
+
 def randomized_set():
     set = data_set_new
     for item in set["data"]:
@@ -77,14 +63,10 @@ async def handler(websocket, path):
     print("handling")
 
     while True:
-        try:
-            set = randomized_set()
-            print("sending", set)
-            await websocket.send(json.dumps(set))
-
-        except websockets.exceptions.ConnectionClosed:
-            print("<disconnect>")
-            return  
+        set = randomized_set()
+        print("sending", set)
+        await websocket.send(json.dumps(set))
+        
         time.sleep(1)
 
 
