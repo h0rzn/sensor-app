@@ -14,15 +14,7 @@ type State = {
 
 export const useSensors = defineStore("sensors", {
     state: (): State => ({
-        latest: [
-            {
-                type: "mytype",
-                name: "myname",
-                temperature: 7,
-                load: 7,
-                power: 7
-            }
-        ]
+        latest: []
     }),
     getters: {
         getByType(state): (typ: string) => Set | undefined {

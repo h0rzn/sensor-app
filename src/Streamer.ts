@@ -4,7 +4,7 @@ import {  MessageTypes } from "./types";
 
 export interface Streamer {
     streamerType: string;
-    start(): Promise<void>
+    start(): Promise<void>;
     stop(): void;
 }
 
@@ -18,9 +18,12 @@ export class WebSocketStreamer implements Streamer {
     url: string;
     ws?: WebSocket;
     store: Store<string, any>;
+    // onClose Callback
+    onClose: Function;
 
-    constructor(url: string) {
+    constructor(url: string, onClose: Function) {
         this.url = url;
+        this.onClose = onClose;
         this.store = useSensors();
     }
 
@@ -31,12 +34,14 @@ export class WebSocketStreamer implements Streamer {
             // onopen handler
             con.onopen = () => {
                 // onclose handler
-                con.onclose = () => console.log("ws closed");
+                con.onclose = () => {
+                    console.log("ws closed");
+                    this.onClose();
+                }
 
                 // onmessage handler
                 con.onmessage = (msg: MessageEvent) => {
                     this.handleMessage(msg);
-                    // this.store.set(obj);
                 };
                 this.ws = con;
                 resolve();
@@ -45,6 +50,7 @@ export class WebSocketStreamer implements Streamer {
             // onerror handler
             con.onerror = () => {
                 console.log("ws: on error")
+                con.close();
                 reject();
             }
 
@@ -57,7 +63,6 @@ export class WebSocketStreamer implements Streamer {
         if (msg) {
             switch (msg.type) {
                 case MessageTypes.Sensors:
-                    console.log("handling", msg.type);
                     this.store.update(msg.data);
                     break;
                 case MessageTypes.Error:

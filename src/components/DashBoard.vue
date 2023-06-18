@@ -2,12 +2,16 @@
     <div class="dashboard">
 
         <div class="content">
-            <div v-if="loading" class="content-items">
-                <ErrorScreen :message="'websocket connection error'" v-if="conFailure"/>
-                <LoadingCircle :dim="'48px'" v-else />
+            <div v-if="state == -1" class="content-items">
+                <ErrorScreen :message="'websocket connection error'"/>
             </div>
 
-            <div v-else class="content-items">
+            <div v-if="state == 0" class="content-items">
+                <LoadingCircle :dim="'48px'"/>
+            </div>
+
+        
+            <div v-if="state == 1" class="content-items">
                 <ComponentItem :type="'cpu'" />
                 <ComponentItem :type="'gpu'" />
             </div>
@@ -32,13 +36,11 @@ export default defineComponent({
         LoadingCircle
     },
     data() : {
-        loading: boolean,
-        conFailure: boolean,
+        state: Number,
         streamer?: Streamer,
     } {
         return {
-            loading: true,
-            conFailure: false,
+            state: 0,
         }
     },
     setup() {
@@ -46,13 +48,16 @@ export default defineComponent({
         return { store };
     },
     async mounted() {
-        this.streamer = new WebSocketStreamer("ws://localhost:8000");
+        this.streamer = new WebSocketStreamer("ws://localhost:8000", () => {
+            // onClose
+            this.state = -1;
+        });
         this.streamer.start().then(() => {
-            this.loading = false;
             console.log("connected");
+            this.state = 1;
         }).catch(() => {
             console.log("connection failed");
-            this.conFailure = true;
+            this.state = -1;
         })
     },
 })

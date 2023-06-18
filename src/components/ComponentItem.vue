@@ -12,12 +12,11 @@
 
         <SensorBox :component-type="type" sensor-type="temperature" />
     </div>
-
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useSensors } from '../store/Sensors';
+import { useSensors, Set } from '../store/Sensors';
 import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
 
@@ -48,8 +47,12 @@ export default defineComponent({
         this.fetchTimer = window.setInterval(this.fetchData, 1000);
     },
     methods: {
+        getCmp(): Set | undefined {
+            return this.store.getByType(this.type)
+        },
         loadRaw() : number {
-            return this.store.getByType(this.type)?.load || -1;
+            // return this.store.getByType(this.type)?.load || -1;
+            return this.getCmp()?.load || -1;
         },
         fetchData() {
             let loaderValue = this.loadRaw();
