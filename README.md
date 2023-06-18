@@ -26,38 +26,22 @@ The Windows-Deamon is currently in a rather early state but the source code will
 ```json
 {
     "type": "sensors",
-    "data": {
-        "cpu": {
+    "data": [
+        {
+            "type": "cpu",
             "name": "i7 13700k",
-            "temperature": {
-                "value": 63,
-                "unit": "degrees"
-            },
-            "load": {
-                "value": 70,
-                "unit": "percent"
-            },
-            "power": {
-                "value": 108,
-                "unit": "watt"
-            }
+            "temperature": 63,
+            "load": 70,
+            "power": 108
         },
-        "gpu": {
+        {
+            "type": "gpu",
             "name": "RTX 2070 Super",
-            "temperature": {
-                "value": 63,
-                "unit": "degrees"
-            },
-            "load": {
-                "value": 70,
-                "unit": "percent"
-            },
-            "power": {
-                "value": 108,
-                "unit": "watt"
-            }
-        } 
-    }
+            "temperature": 63,
+            "load": 70,
+            "power": 108
+        }, 
+    ]
 }
 ```
 
