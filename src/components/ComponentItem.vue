@@ -4,7 +4,7 @@
             <p class="hardware-type">{{ type }}</p>
             <div class="load-section">
                 <p class="load-value">{{ computedLoaderText }}</p>
-                <LoadIndicator :update-interval="1000" :fetch-func="loadRaw" :min-value="0" :max-value="100" />
+                <LineIndicator :type="type" :sensorType="'load'" :min="0" :max="100" />
             </div>
         </div>
 
@@ -17,11 +17,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useSensors, Set } from '../store/Sensors';
-import LoadIndicator from './LoadIndicator.vue';
+// import LoadIndicator from './LoadIndicator.vue';
 import SensorBox from './SensorBox.vue';
+import LineIndicator from './LineIndicator.vue';
 
 export default defineComponent({
-    components: { LoadIndicator, SensorBox },
+    components: { SensorBox, LineIndicator },
     props: {
         type: { type: String, required: true }
     },

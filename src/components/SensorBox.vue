@@ -5,9 +5,9 @@
             <p class="value" >{{ computedDisplayValue }}</p>
         </div>
        <div class="box-section" id="load-section">
-            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="100" v-if="sensorType == 'temperature'" />
-            <LoadIndicator :update-interval="100" :fetch-func="getValue" :min-value="0" :max-value="300" v-else-if="sensorType == 'power'" />
-       </div>
+            <LineIndicator :type="componentType" :sensorType="sensorType" :min="0" :max="100" />
+            <!-- <LineIndicator :type="componentType" :min="0" :max="100" /> -->
+        </div>
     </div>
 
     <div class="box" id="loading-box" v-else>
@@ -16,15 +16,15 @@
 </template>
 
 <script lang="ts">
-import LoadIndicator from './LoadIndicator.vue';
 import { useSensors } from '@/store/Sensors';
 import LoadingCircle from './LoadingCircle.vue';
+import LineIndicator from './LineIndicator.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
     components: { 
-        LoadIndicator,
         LoadingCircle,
+        LineIndicator
     },
     props: {
         sensorType: { type: String, required: true},
@@ -55,6 +55,7 @@ export default defineComponent({
     methods: {
         getHardwareData() {
             if (this.sensorType == "temperature") {
+                this.store.getByType
                 let temp = this.store.getByType(this.componentType)?.temperature;
                 if (temp) {
                     this.rawValue = temp;
